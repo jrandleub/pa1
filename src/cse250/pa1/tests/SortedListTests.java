@@ -3,6 +3,7 @@ package cse250.pa1.tests;
 import cse250.pa1.LinkedListNode;
 import cse250.pa1.SortedList;
 
+import java.util.LinkedList;
 import java.util.Optional;
 
 import org.junit.Test;
@@ -75,4 +76,19 @@ public class SortedListTests {
 
         assertEquals(second, list.getRef(1));
 	}
+
+    @Test
+    public void testInsertDuplicates(){
+        SortedList<Integer> list = new SortedList<>();
+        list.insert(5);
+        list.insert(5);
+        list.insert(5);
+
+        assertTrue(list.headNode.isPresent());
+        assertFalse(list.headNode.get().next.isPresent());
+
+        assertEquals(Integer.valueOf(5), list.headNode.get().value);
+        assertEquals(3, list.headNode.get().count);
+        assertEquals(3, list.length);
+    }
 }
