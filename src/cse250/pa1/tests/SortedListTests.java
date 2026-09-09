@@ -91,4 +91,30 @@ public class SortedListTests {
         assertEquals(3, list.headNode.get().count);
         assertEquals(3, list.length);
     }
+
+    @Test
+    public void testInsertBetweenDuplicates(){
+        SortedList<Integer> list = new SortedList<>();
+        list.insert(5);
+        list.insert(5);
+        list.insert(3);
+        list.insert(5);
+        list.insert(3);
+        list.insert(4);
+
+        assertTrue(list.headNode.isPresent());
+        assertTrue(list.headNode.get().next.isPresent());
+
+        assertEquals(6, list.length);
+        assertEquals(2, list.headNode.get().count);
+        assertEquals(1, list.headNode.get().next.get().count);
+
+        assertEquals(Integer.valueOf(3), list.get(0));
+        assertEquals(Integer.valueOf(3), list.get(1));
+        assertEquals(Integer.valueOf(4), list.get(2));
+        assertEquals(Integer.valueOf(5), list.get(3));
+        assertEquals(Integer.valueOf(5), list.get(4));
+        assertEquals(Integer.valueOf(5), list.get(5));
+
+    }
 }
