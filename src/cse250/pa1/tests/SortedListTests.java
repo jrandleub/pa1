@@ -144,4 +144,61 @@ public class SortedListTests {
         assertEquals(three, list.headNode.get());
 
     }
+
+    @Test
+    public void testFindRefBefore(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(8, 1);
+		LinkedListNode<Integer> third = new LinkedListNode<>(15, 1);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+        second.next = Optional.of(third);
+        third.prev = Optional.of(second);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(third);
+        list.length = 3;
+
+        assertTrue(list.findRefBefore(3).isPresent());
+        assertTrue(list.findRefBefore(8).isPresent());
+        assertTrue(list.findRefBefore(15).isPresent());
+        assertTrue(list.findRefBefore(20).isPresent());
+
+        assertFalse(list.findRefBefore(1).isPresent());
+
+        assertEquals(Integer.valueOf(8), list.findRefBefore(8).get().value);
+        assertEquals(Integer.valueOf(8), list.findRefBefore(10).get().value);
+        assertEquals(Integer.valueOf(15), list.findRefBefore(20).get().value);
+    }
+
+    @Test 
+    public void testFindRefBeforeEmptyList(){
+        SortedList<Integer> list = new SortedList<>();
+        assertEquals(Optional.empty(), list.findRefBefore(5));
+    }
+
+    @Test
+    public void testFindRefBeforeWithHints(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(8, 1);
+		LinkedListNode<Integer> third = new LinkedListNode<>(15, 1);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+        second.next = Optional.of(third);
+        third.prev = Optional.of(second);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(third);
+        list.length = 3;
+
+        assertEquals(Integer.valueOf(8), list.findRefBefore(10, first).get().value);
+        assertEquals(Integer.valueOf(8), list.findRefBefore(8, third).get().value);
+        assertEquals(Integer.valueOf(3), list.findRefBefore(4, third).get().value);
+
+    }
+
 }
