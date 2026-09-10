@@ -104,10 +104,12 @@ public class SortedListTests {
 
         assertTrue(list.headNode.isPresent());
         assertTrue(list.headNode.get().next.isPresent());
+        assertTrue(list.headNode.get().next.get().next.isPresent());
 
         assertEquals(6, list.length);
         assertEquals(2, list.headNode.get().count);
         assertEquals(1, list.headNode.get().next.get().count);
+        assertEquals(3, list.headNode.get().next.get().next.get().count);
 
         assertEquals(Integer.valueOf(3), list.get(0));
         assertEquals(Integer.valueOf(3), list.get(1));
@@ -115,6 +117,31 @@ public class SortedListTests {
         assertEquals(Integer.valueOf(5), list.get(3));
         assertEquals(Integer.valueOf(5), list.get(4));
         assertEquals(Integer.valueOf(5), list.get(5));
+
+    }
+
+    @Test
+    public void testInsertWithHintBeforeHint(){
+        SortedList<Integer> list = new SortedList<>();
+        LinkedListNode<Integer> three = list.insert(3);
+        LinkedListNode<Integer> seven = list.insert(7);
+
+        LinkedListNode<Integer> five = list.insert(5, seven);
+
+        assertEquals(3, list.length);
+
+        assertEquals(Integer.valueOf(3), list.get(0));
+        assertEquals(Integer.valueOf(5), list.get(1));
+        assertEquals(Integer.valueOf(7), list.get(2));
+
+        assertEquals(five, three.next.get());
+        assertEquals(seven, five.next.get());
+
+        assertEquals(three, five.prev.get());
+        assertEquals(five, seven.prev.get());
+
+        assertEquals(seven, list.lastNode.get());
+        assertEquals(three, list.headNode.get());
 
     }
 }
