@@ -77,6 +77,12 @@ public class SortedListTests {
         assertEquals(second, list.getRef(1));
 	}
 
+
+    /*
+    Tests if adding duplicates does NOT create a new node for each duplicate,
+    but instead creates only one node and increases that nodes count
+    based on how many duplicates are added.    
+    */
     @Test
     public void testInsertDuplicates(){
         SortedList<Integer> list = new SortedList<>();
@@ -92,6 +98,11 @@ public class SortedListTests {
         assertEquals(3, list.length);
     }
 
+    /*
+    Tests if adding numbers in between duplicates will sort them
+    exampl adding 5, 5, 4, 5 should be:
+    [v: 4, c:1] <--> [v: 5, c: 3]
+    */
     @Test
     public void testInsertBetweenDuplicates(){
         SortedList<Integer> list = new SortedList<>();
@@ -120,6 +131,11 @@ public class SortedListTests {
 
     }
 
+    /*
+    Tests if by inserting with a hint will insert the item before the hint
+    Example: a list of {3, 7} 
+    insert before seven should return {3, 5, 7}
+    */
     @Test
     public void testInsertWithHintBeforeHint(){
         SortedList<Integer> list = new SortedList<>();
@@ -145,6 +161,14 @@ public class SortedListTests {
 
     }
 
+
+    /*
+    Tests findRefBefore on a manual list of {3, 8, 15}
+    Checks if searching by the exact element is present
+    Checks if searching past the range, i this case 20 should return 15
+    Checks if searching before the range, in this case 1 should return empty
+    Finally checks if searching past the number, for example 10 should return 8
+    */
     @Test
     public void testFindRefBefore(){
         LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
@@ -173,12 +197,20 @@ public class SortedListTests {
         assertEquals(Integer.valueOf(15), list.findRefBefore(20).get().value);
     }
 
+
+    /*
+    Tests if searching an empty list returns empty
+    */
     @Test 
     public void testFindRefBeforeEmptyList(){
         SortedList<Integer> list = new SortedList<>();
         assertEquals(Optional.empty(), list.findRefBefore(5));
     }
 
+
+    /*
+    Tests if searching with a hint returns the expected value
+    */
     @Test
     public void testFindRefBeforeWithHints(){
         LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
