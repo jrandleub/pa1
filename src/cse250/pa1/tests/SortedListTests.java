@@ -377,6 +377,79 @@ public class SortedListTests {
 
     }
 
-    
+    /*
+    Tests that getRef throws out of bounds when index is 
+    less than 0
+    or >= length of list
+    */
+    @Test public void testGetRefOutOfBounds(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(1, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(2, 1);
+		LinkedListNode<Integer> third = new LinkedListNode<>(3, 1);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+        second.next = Optional.of(third);
+        third.prev = Optional.of(second);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(third);
+        list.length = 3;
+
+        try{
+            list.getRef(-1);
+            fail();
+        }
+        catch(IndexOutOfBoundsException e){
+            // expected
+        }
+
+        try{
+            list.getRef(3);
+            fail();
+        }
+        catch(IndexOutOfBoundsException e){
+            // expected
+        }
+    }
+
+    /*
+    Tests that getRef throws out of bounds on empty list
+    */
+    @Test
+    public void testGetRefEmptyList(){
+        SortedList<Integer> list = new SortedList<>();
+
+        try{
+            list.getRef(0);
+            fail();
+        }
+        catch(IndexOutOfBoundsException e){
+            // expected
+        }
+    }
+
+    /*
+    Tests that getRef returns the correct node when count is 1
+    and when count is 2
+    */
+    @Test
+    public void testGetRefReturnsCorrectNode(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(5, 2);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(second);
+        list.length = 3;
+
+        assertEquals(first, list.getRef(0));
+        assertEquals(second, list.getRef(1));
+        assertEquals(second, list.getRef(2));
+    }
 
 }
