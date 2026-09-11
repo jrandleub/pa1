@@ -212,7 +212,7 @@ public class SortedListTests {
     Tests if searching with a hint returns the expected value
     */
     @Test
-    public void testFindRefBeforeWithHints(){
+    public void testFindRefBeforeWithHint(){
         LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
 		LinkedListNode<Integer> second = new LinkedListNode<>(8, 1);
 		LinkedListNode<Integer> third = new LinkedListNode<>(15, 1);
@@ -279,7 +279,7 @@ public class SortedListTests {
     also checks if a value that doesnt exist returns empty 
     */
     @Test
-    public void testFindRefWithHints(){
+    public void testFindRefWithHint(){
         LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
 		LinkedListNode<Integer> second = new LinkedListNode<>(8, 1);
 		LinkedListNode<Integer> third = new LinkedListNode<>(15, 1);
@@ -298,5 +298,85 @@ public class SortedListTests {
         assertEquals(Integer.valueOf(3), list.findRef(3, third).get().value);
         assertFalse(list.findRef(10, first).isPresent());
     }
+
+
+    /*
+    Tests if get() throws an outofbounds error when index is 
+    less than 0 or >= length of list
+    */
+    @Test
+    public void testGetOutOfBounds(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(1, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(2, 1);
+		LinkedListNode<Integer> third = new LinkedListNode<>(3, 1);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+        second.next = Optional.of(third);
+        third.prev = Optional.of(second);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(third);
+        list.length = 3;
+
+        try{
+            list.get(-1);
+            fail();
+        }
+        catch(IndexOutOfBoundsException e){
+            // expected
+        }
+
+        try{
+            list.get(3);
+            fail();
+        }
+        catch(IndexOutOfBoundsException e){
+            // expected
+        }
+    }
+
+
+    /*
+    Tests if get returns correct value on a node with a single
+    count and a node with count of 2
+    */
+    @Test
+    public void testGetRetturnCorrectValue(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(5, 2);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(second);
+        list.length = 3;
+
+        assertEquals(Integer.valueOf(3), list.get(0));
+        assertEquals(Integer.valueOf(5), list.get(1));
+        assertEquals(Integer.valueOf(5), list.get(2));
+    }
+
+    /*
+    Test get on an empty list
+    */
+    @Test
+    public void testGetEmptyList(){
+        SortedList<Integer> list = new SortedList<>();
+
+        try{
+            list.get(0);
+            fail();
+        }
+        catch(IndexOutOfBoundsException e){
+            // expected
+        }
+
+    }
+
+    
 
 }
