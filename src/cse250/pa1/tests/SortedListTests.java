@@ -233,4 +233,70 @@ public class SortedListTests {
 
     }
 
+
+    /*
+    Tests to see if it correctly finds the given values,
+    also if the value being searched is not found should return empty
+    */
+    @Test 
+    public void testFindRef(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(8, 1);
+		LinkedListNode<Integer> third = new LinkedListNode<>(15, 1);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+        second.next = Optional.of(third);
+        third.prev = Optional.of(second);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(third);
+        list.length = 3;
+
+        assertEquals(Integer.valueOf(3), list.findRef(3).get().value);
+        assertEquals(Integer.valueOf(8), list.findRef(8).get().value);
+        assertEquals(Integer.valueOf(15), list.findRef(15).get().value);
+
+        assertFalse(list.findRef(1).isPresent());
+        assertFalse(list.findRef(4).isPresent());
+        assertFalse(list.findRef(20).isPresent());
+    }
+
+
+    /*
+    Tests if an empty list returns empty
+    */
+    @Test
+    public void testFindRefEmptyList(){
+        SortedList<Integer> list = new SortedList<>();
+        assertEquals(Optional.empty(), list.findRef(5));
+    }
+
+
+    /*
+    Tests if it can find ref by starting at both head and tail
+    also checks if a value that doesnt exist returns empty 
+    */
+    @Test
+    public void testFindRefWithHints(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(8, 1);
+		LinkedListNode<Integer> third = new LinkedListNode<>(15, 1);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+        second.next = Optional.of(third);
+        third.prev = Optional.of(second);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(third);
+        list.length = 3;
+
+        assertEquals(Integer.valueOf(15), list.findRef(15, first).get().value);
+        assertEquals(Integer.valueOf(3), list.findRef(3, third).get().value);
+        assertFalse(list.findRef(10, first).isPresent());
+    }
+
 }
