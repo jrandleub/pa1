@@ -452,4 +452,212 @@ public class SortedListTests {
         assertEquals(second, list.getRef(2));
     }
 
+    /*
+    Test that removing one copy from a duplicate
+    decrements that nodes count by ref
+    */
+    @Test
+    public void testRemoveOneCopyFromDuplicate(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(5, 2);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(second);
+        list.length = 3;
+
+        assertEquals(Integer.valueOf(5), list.remove(second));
+
+        assertEquals(2, list.length);
+        assertEquals(1, second.count);
+    }
+
+    /*
+    Test if the node has count of one, the whole
+    node gets removed from the list
+    */
+   @Test
+   public void testRemoveNode(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(5, 1);
+		LinkedListNode<Integer> third = new LinkedListNode<>(7, 1);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+        second.next = Optional.of(third);
+        third.prev = Optional.of(second);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(third);
+        list.length = 3;
+
+        assertEquals(Integer.valueOf(5), list.remove(second));
+
+        assertEquals(2, list.length);
+        assertEquals(third, first.next.get());
+        assertEquals(first, third.prev.get());
+   }
+
+   /*
+    Test if the node has count of one, the whole
+    node gets removed from the list
+    */
+   @Test
+   public void testRemoveOnlyNodeInList(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(5, 1);
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(first);
+        list.length = 1;
+
+        assertEquals(Integer.valueOf(5), list.remove(first));
+
+        assertEquals(0, list.length);
+        assertFalse(list.headNode.isPresent());
+        assertFalse(list.lastNode.isPresent());
+   }
+
+   /*
+    Test that removing one copy from a duplicate
+    decrements that nodes count by ref
+    */
+    @Test
+    public void testRemoveNCopiesFromDuplicate(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(5, 3);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(second);
+        list.length = 4;
+
+        assertEquals(Integer.valueOf(5), list.removeN(second, 2));
+
+        assertEquals(2, list.length);
+        assertEquals(1, second.count);
+
+        assertEquals(second, first.next.get());
+        assertEquals(first, second.prev.get());
+        assertEquals(second, list.lastNode.get());
+    }
+
+    @Test
+    public void removeNIllegalArgumentException(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(5, 3);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(second);
+        list.length = 4;
+
+        try{
+            list.removeN(second, 4);
+            fail();
+        }
+        catch(IllegalArgumentException e){
+            // expected
+        }
+
+        assertEquals(3, second.count);
+        assertEquals(4, list.length);
+        assertEquals(second, first.next.get());
+    }
+
+    @Test
+    public void testRemoveNExactAmount(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(5, 3);
+		LinkedListNode<Integer> third = new LinkedListNode<>(7, 2);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+        second.next = Optional.of(third);
+        third.prev = Optional.of(second);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(third);
+        list.length = 6;
+
+        assertEquals(Integer.valueOf(5), list.removeN(second, 3));
+
+        assertEquals(3, list.length);
+        assertEquals(third, first.next.get());
+        assertEquals(first, third.prev.get());
+
+    }
+
+    @Test
+    public void testRemoveAll(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(5, 3);
+		LinkedListNode<Integer> third = new LinkedListNode<>(7, 2);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+        second.next = Optional.of(third);
+        third.prev = Optional.of(second);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(third);
+        list.length = 6;
+
+        assertEquals(Integer.valueOf(5), list.removeAll(second));
+
+        assertEquals(3, list.length);
+        assertEquals(third, first.next.get());
+        assertEquals(first, third.prev.get());
+
+    }
+
+    @Test
+    public void testRemoveAllEverythingFromList(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3,2);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(first);
+        list.length = 2;
+
+        assertEquals(Integer.valueOf(3), list.removeAll(first));
+
+        assertEquals(0, list.length);
+        assertFalse(list.headNode.isPresent());
+        assertFalse(list.lastNode.isPresent());
+    }
+
+    @Test
+    public void removeAllHeadNode(){
+        LinkedListNode<Integer> first = new LinkedListNode<>(3, 1);
+		LinkedListNode<Integer> second = new LinkedListNode<>(5, 1);
+
+        first.next = Optional.of(second);
+        second.prev = Optional.of(first);
+
+        SortedList<Integer> list = new SortedList<>();
+        list.headNode = Optional.of(first);
+        list.lastNode = Optional.of(second);
+        list.length = 2;
+
+        assertEquals(Integer.valueOf(3), list.removeAll(first));
+        assertEquals(1, list.length);
+        assertEquals(second, list.headNode.get());
+        assertEquals(second, list.lastNode.get());
+        assertFalse(second.prev.isPresent());
+        assertFalse(second.next.isPresent());
+
+    }
+
 }
