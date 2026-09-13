@@ -80,7 +80,29 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
      */
     public Optional<LinkedListNode<T>> findRefBefore(T elem, LinkedListNode<T> hint) {
         // TODO: implementation
-        return Optional.empty();
+        LinkedListNode<T> curr = hint;
+        int comparison = elem.compareTo(curr.value);
+        if (comparison == 0){
+            return Optional.of(curr);
+        }
+
+        if (comparison > 0){
+            while(curr.next.isPresent() && elem.compareTo(curr.next.get().value) >= 0){
+                curr = curr.next.get();
+            }
+            return Optional.of(curr);
+            
+        }
+        else {
+            while(curr.prev.isPresent() && elem.compareTo(curr.value) <= 0){
+                curr = curr.prev.get();
+            }
+            if (elem.compareTo(curr.value) < 0) {
+                return Optional.empty();
+            }
+            return Optional.of(curr);
+        }
+        
     }
 
     /**
