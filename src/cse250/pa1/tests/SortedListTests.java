@@ -230,7 +230,6 @@ public class SortedListTests {
         assertEquals(Integer.valueOf(8), list.findRefBefore(10, first).get().value);
         assertEquals(Integer.valueOf(8), list.findRefBefore(8, third).get().value);
         assertEquals(Integer.valueOf(3), list.findRefBefore(4, third).get().value);
-
     }
 
 

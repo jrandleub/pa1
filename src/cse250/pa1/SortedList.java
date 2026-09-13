@@ -82,6 +82,7 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
         // TODO: implementation
         LinkedListNode<T> curr = hint;
         int comparison = elem.compareTo(curr.value);
+
         if (comparison == 0){
             return Optional.of(curr);
         }
@@ -94,7 +95,7 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
             
         }
         else {
-            while(curr.prev.isPresent() && elem.compareTo(curr.value) <= 0){
+            while(curr.prev.isPresent() && elem.compareTo(curr.value) < 0){
                 curr = curr.prev.get();
             }
             if (elem.compareTo(curr.value) < 0) {
