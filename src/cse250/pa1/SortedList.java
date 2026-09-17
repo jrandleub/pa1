@@ -58,7 +58,9 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
      * This function should run in O(length)
      */
     public Optional<LinkedListNode<T>> findRefBefore(T elem) {
-        // TODO: implementation
+        if (headNode.isPresent()) {
+            return findRefBefore(elem, headNode.get());
+        }
         return Optional.empty();
     }
 
@@ -79,7 +81,6 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
      * function should run in O(|i-j|)
      */
     public Optional<LinkedListNode<T>> findRefBefore(T elem, LinkedListNode<T> hint) {
-        // TODO: implementation
         LinkedListNode<T> curr = hint;
         int comparison = elem.compareTo(curr.value);
 
@@ -117,6 +118,10 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
      */
     public Optional<LinkedListNode<T>> findRef(T elem) {
         // TODO: implementation
+        Optional<LinkedListNode<T>> possibleNode = findRefBefore(elem);
+        if (possibleNode.isPresent() && possibleNode.get().value.compareTo(elem) == 0){
+            return possibleNode;
+        }
         return Optional.empty();
     }
 
@@ -132,7 +137,11 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
      * function should run in O(|i-j|)
      */
     public Optional<LinkedListNode<T>> findRef(T elem, LinkedListNode<T> hint) {
-        // TODO: implementation
+        Optional<LinkedListNode<T>> possibleNode = findRefBefore(elem, hint);
+
+        if (possibleNode.isPresent() && possibleNode.get().value.compareTo(elem) == 0){
+            return possibleNode;
+        }
         return Optional.empty();
     }
 
