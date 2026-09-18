@@ -118,7 +118,6 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
      * This function should run in O(length)
      */
     public Optional<LinkedListNode<T>> findRef(T elem) {
-        // TODO: implementation
         Optional<LinkedListNode<T>> possibleNode = findRefBefore(elem);
         if (possibleNode.isPresent() && possibleNode.get().value.compareTo(elem) == 0){
             return possibleNode;
@@ -205,8 +204,17 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
      * This function should run in O(length)
      */
     public LinkedListNode<T> insert(T elem) {
-        // TODO: implementation
-        return null;
+        if(headNode.isEmpty()){
+            LinkedListNode<T> newNode = new LinkedListNode<T>(elem, 1);
+
+            headNode = Optional.of(newNode);
+            lastNode = Optional.of(newNode);
+
+            length++;
+            return newNode;
+        }
+        
+        return insert(elem, headNode.get());
     }
 
     /**
@@ -227,8 +235,39 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
      * function should run in O(|i-j|)
      */
     public LinkedListNode<T> insert(T elem, LinkedListNode<T> hint) {
-        // TODO: implementation
-        return null;
+        Optional<LinkedListNode<T>> before = findRefBefore(elem, hint);
+
+        if (before.isPresent() && before.get().value.compareTo(elem) == 0){
+            before.get().count++;
+            length++;
+            return before.get();
+        }
+
+        LinkedListNode<T> newNode = new LinkedListNode<>(elem, 1);
+
+        if (before.isEmpty()){
+            newNode.next = headNode;
+            headNode.get().prev = Optional.of(newNode);
+            headNode = Optional.of(newNode);
+
+            length++;
+            return newNode;
+        }
+
+        LinkedListNode<T> previousNode = before.get();
+
+        newNode.prev = Optional.of(previousNode);
+        newNode.next = previousNode.next;
+
+        if(newNode.next.isPresent()){
+            newNode.next.get().prev = Optional.of(newNode);
+        } else {
+            lastNode = Optional.of(newNode);
+        }
+        previousNode.next = Optional.of(newNode);
+        
+        length++;
+        return newNode;
     }
 
     /**
