@@ -283,8 +283,7 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
      * This function should run in O(1)
      */
     public T remove(LinkedListNode<T> ref) {
-        // TODO: implementation
-        return null;
+        return removeN(ref, 1);
     }
 
     /**
@@ -301,8 +300,30 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
      * This function should run in O(1)
      */
     public T removeN(LinkedListNode<T> ref, int n) throws IllegalArgumentException {
-        // TODO: implementation
-        return null;
+        if (n > ref.count) {
+            throw new IllegalArgumentException();
+        }
+
+        if (n < ref.count){
+            ref.count -= n;
+            length -= n;
+            return ref.value;
+        }
+
+        if(ref.prev.isPresent()){
+            ref.prev.get().next = ref.next;
+        } else {
+            headNode = ref.next;
+        }
+
+        if(ref.next.isPresent()){
+            ref.next.get().prev = ref.prev;
+        } else {
+            lastNode = ref.prev;
+        }
+
+        length -= n;
+        return ref.value;
     }
 
     /**
@@ -314,8 +335,7 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
      * This function should run in O(1)
      */
     public T removeAll(LinkedListNode<T> ref) {
-        // TODO: implementation
-        return null;
+        return removeN(ref, ref.count);
     }
 
     /**
