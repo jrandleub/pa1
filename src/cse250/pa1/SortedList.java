@@ -2,6 +2,7 @@ package cse250.pa1;
 
 import cse250.pa1.LinkedListNode;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Optional;
 
 /**
@@ -160,8 +161,17 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
      * This function should run in O(idx)
      */
     public LinkedListNode<T> getRef(int idx) throws IndexOutOfBoundsException {
-        // TODO: implementation
-        return null;
+        if(idx < 0 || idx >= length){
+            throw new IndexOutOfBoundsException();
+        }
+
+        LinkedListNode<T> curr = headNode.get();
+        while(idx >= curr.count){
+            idx -= curr.count;
+            curr = curr.next.get();
+        }
+
+        return curr;
     }
 
     /**
@@ -176,8 +186,7 @@ public class SortedList<T extends Comparable<T>> implements Iterable<T> {
      * This function should run in O(idx)
      */
     public T get(int idx) throws IndexOutOfBoundsException {
-        // TODO: implementation
-        return null;
+        return getRef(idx).value;
     }
 
     /**
